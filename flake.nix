@@ -11,10 +11,7 @@
         pkgs = import nixpkgs { inherit system; };
       in
       {
-        defaultPackage = pkgs.callPackage ./derivation.nix { inherit (inputs) gitignore-source; };
-        checks = {
-          defaultPackageBuild = self.defaultPackage.${system};
-        };
+        packages.default = pkgs.callPackage ./derivation.nix { inherit (inputs) gitignore-source; };
       }
     );
 }
