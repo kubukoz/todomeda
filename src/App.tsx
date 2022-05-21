@@ -1,12 +1,5 @@
-import {
-  AppBar,
-  Grid,
-  List,
-  Toolbar,
-  Typography,
-  Zoom as Grow,
-} from "@mui/material"
-import { Box, Container } from "@mui/system"
+import { AppBar, List, Toolbar, Typography } from "@mui/material"
+import { Box } from "@mui/system"
 import { useState } from "react"
 import { TaskComponent } from "./components/Task"
 import { switchTask, Task } from "./types/types"
