@@ -7,3 +7,7 @@ export type Task = {
 export const switchTask = (task: Task): Task => {
   return { ...task, done: !task.done }
 }
+
+export type User = {
+  tasks: readonly Task[]
+}
