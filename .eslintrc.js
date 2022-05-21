@@ -18,9 +18,10 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  plugins: ["react", "@typescript-eslint"],
+  plugins: ["react", "@typescript-eslint", "unused-imports"],
   rules: {
     "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
   },
   settings: { react: { version: "detect" } },
 }
