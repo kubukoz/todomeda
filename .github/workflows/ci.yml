@@ -19,3 +19,17 @@ jobs:
         name: kubukoz
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     - run: nix build --print-build-logs
+    - uses: FirebaseExtended/action-hosting-deploy@v0
+      if: github.ref == 'refs/heads/main'
+      with:
+        repoToken: '${{ secrets.GITHUB_TOKEN }}'
+        firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_TODOMEDA_D9195 }}'
+        channelId: live
+        projectId: todomeda-d9195
+    - uses: FirebaseExtended/action-hosting-deploy@v0
+      if: github.ref != 'refs/heads/main'
+      with:
+        repoToken: '${{ secrets.GITHUB_TOKEN }}'
+        firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_TODOMEDA_D9195 }}'
+        projectId: todomeda-d9195
+
