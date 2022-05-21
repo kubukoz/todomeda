@@ -11,7 +11,7 @@ mkYarnPackage {
   yarnLock = ./yarn.lock;
 
   buildPhase = ''
-    yarn build
+    yarn --offline build
   '';
 
   installPhase = ''
