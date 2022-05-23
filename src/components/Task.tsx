@@ -10,10 +10,7 @@ type Props = {
   handleClick: (task: Task) => () => void
 }
 
-export const TaskComponent: React.FC<Props> = (props) => {
-  const task = props.task
-  const handleClick = props.handleClick
-
+export const TaskComponent: React.FC<Props> = ({ task, handleClick }) => {
   return (
     <ListItem disablePadding>
       <ListItemButton role={undefined} onClick={handleClick(task)}>

@@ -1,3 +1,5 @@
+import fauth from "firebase/auth"
+
 export type Task = {
   id: string
   label: string
@@ -11,3 +13,5 @@ export const switchTask = (task: Task): Task => {
 export type User = {
   tasks: readonly Task[]
 }
+
+export type UserRef = fauth.User
