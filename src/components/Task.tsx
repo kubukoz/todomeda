@@ -1,10 +1,8 @@
-import {
-  Checkbox,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material"
+import Checkbox from "@mui/material/Checkbox"
+import ListItem from "@mui/material/ListItem"
+import ListItemButton from "@mui/material/ListItemButton"
+import ListItemIcon from "@mui/material/ListItemIcon"
+import ListItemText from "@mui/material/ListItemText"
 import { Task } from "../types/types"
 
 type Props = {
