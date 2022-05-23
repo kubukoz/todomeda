@@ -1,4 +1,5 @@
 import AppBar from "@mui/material/AppBar"
+import Button from "@mui/material/Button"
 import Toolbar from "@mui/material/Toolbar"
 import Typography from "@mui/material/Typography"
 import Box from "@mui/system/Box"
@@ -25,6 +26,8 @@ import {
   getDoc,
   doc,
   setDoc,
+  updateDoc,
+  arrayUnion,
 } from "firebase/firestore"
 import { TaskList } from "./components/TaskList"
 
@@ -75,19 +78,29 @@ const createUser = async (userRef: UserRef, user: User) => {
   await setDoc(userDocRef(userRef), user)
 }
 
-const fetchTasks = async (userRef: UserRef): Promise<readonly Task[]> => {
+const fetchOrCreateTasks = async (
+  userRef: UserRef,
+): Promise<readonly Task[]> => {
   const existingUser = await getUser(userRef)
 
   if (existingUser) {
     return existingUser.tasks
   } else {
     const tasks = initTasks()
-    await createUser(userRef, {
-      tasks,
-    } as User)
+    await createUser(userRef, { tasks })
 
     return tasks
   }
+}
+
+const upsertTasks = (userRef: UserRef, tasks: readonly Task[]) => {
+  return updateDoc(userDocRef(userRef), { tasks })
+}
+
+const moreTasks = async (userRef: UserRef) => {
+  const newTasks = initTasks()
+  await upsertTasks(userRef, newTasks)
+  return newTasks
 }
 
 const auth = initializeAuth(firebaseApp, {
@@ -136,13 +149,17 @@ const App: React.FC = () => {
               </Toolbar>
             </AppBar>
           </Box>
-          <TaskList fetchTasks={() => fetchTasks(userRef.value)} />
+          <TaskList
+            fetchTasks={() => fetchOrCreateTasks(userRef.value)}
+            upsertTasks={(tasks) => upsertTasks(userRef.value, tasks)}
+            moreTasks={() => moreTasks(userRef.value)}
+          />
         </>
       )
     case "unauthed":
       return (
         <>
-          <button onClick={doLogin}>Login with github</button>
+          <Button onClick={doLogin}>Login with github</Button>
         </>
       )
     case "unknown":
