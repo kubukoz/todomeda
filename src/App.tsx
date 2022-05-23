@@ -9,15 +9,9 @@ import { switchTask, Task, User } from "./types/types"
 import { initializeApp } from "firebase/app"
 import {
   getFirestore,
-  addDoc,
   collection,
-  query,
-  getDocs,
-  FirestoreDataConverter,
   QueryDocumentSnapshot,
   SnapshotOptions,
-  DocumentData,
-  orderBy,
   getDoc,
   doc,
   setDoc,
