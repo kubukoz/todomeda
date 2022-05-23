@@ -15,3 +15,8 @@ export type User = {
 }
 
 export type UserRef = fauth.User
+
+export type UserState<T> =
+  | { state: "unknown" }
+  | { state: "unauthed" }
+  | { state: "authed"; value: T }

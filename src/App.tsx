@@ -1,11 +1,9 @@
 import AppBar from "@mui/material/AppBar"
-import List from "@mui/material/List"
 import Toolbar from "@mui/material/Toolbar"
 import Typography from "@mui/material/Typography"
 import Box from "@mui/system/Box"
 import { useEffect, useState } from "react"
-import { TaskComponent } from "./components/Task"
-import { switchTask, Task, User, UserRef } from "./types/types"
+import { Task, User, UserRef, UserState } from "./types/types"
 import { initializeApp } from "firebase/app"
 
 import {
@@ -16,7 +14,6 @@ import {
   indexedDBLocalPersistence,
   signInWithRedirect,
   GithubAuthProvider,
-  getRedirectResult,
   onAuthStateChanged,
 } from "firebase/auth"
 
@@ -103,11 +100,11 @@ const auth = initializeAuth(firebaseApp, {
 })
 
 const useCurrentUser = () => {
-  const [user, setUser] = useState<typeof auth.currentUser>(null)
+  const [user, setUser] = useState<UserState<UserRef>>({ state: "unknown" })
 
   useEffect(() => {
     const cancel = auth.onAuthStateChanged((u) => {
-      setUser(u)
+      setUser(u ? { state: "authed", value: u } : { state: "unauthed" })
     })
 
     return () => cancel()
@@ -115,35 +112,42 @@ const useCurrentUser = () => {
 
   return user
 }
+
+const doLogin = () => {
+  signInWithRedirect(auth, new GithubAuthProvider()).catch((e) => {
+    window.alert(JSON.stringify(e))
+    console.log(e)
+  })
+}
+
 const App: React.FC = () => {
   const userRef = useCurrentUser()
 
-  const doLogin = () => {
-    signInWithRedirect(
-      auth,
-      new GithubAuthProvider(),
-      browserPopupRedirectResolver,
-    )
+  switch (userRef.state) {
+    case "authed":
+      return (
+        <>
+          <Box sx={{ flexGrow: 1 }}>
+            <AppBar position="static">
+              <Toolbar>
+                <Typography variant="h6" component="div">
+                  Today&apos;s tasks for {userRef.value.displayName}
+                </Typography>
+              </Toolbar>
+            </AppBar>
+          </Box>
+          <TaskList fetchTasks={() => fetchTasks(userRef.value)} />
+        </>
+      )
+    case "unauthed":
+      return (
+        <>
+          <button onClick={doLogin}>Login with github</button>
+        </>
+      )
+    case "unknown":
+      return <>Fetching user...</>
   }
-
-  return userRef ? (
-    <>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography variant="h6" component="div">
-              Today&apos;s tasks for {userRef.displayName}
-            </Typography>
-          </Toolbar>
-        </AppBar>
-      </Box>
-      <TaskList fetchTasks={() => fetchTasks(userRef)} />
-    </>
-  ) : (
-    <>
-      <button onClick={doLogin}>Login with github</button>
-    </>
-  )
 }
 
 export default App
