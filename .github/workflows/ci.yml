@@ -27,7 +27,7 @@ jobs:
         channelId: live
         projectId: todomeda-d9195
     - uses: FirebaseExtended/action-hosting-deploy@v0
-      if: github.ref != 'refs/heads/main' && github.event_name == 'pull_request'.
+      if: github.ref != 'refs/heads/main' && github.event_name == 'pull_request'
       with:
         repoToken: '${{ secrets.GITHUB_TOKEN }}'
         firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_TODOMEDA_D9195 }}'
