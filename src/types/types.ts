@@ -14,7 +14,7 @@ export type User = {
   tasks: readonly Task[]
 }
 
-export type UserRef = fauth.User
+export type UserRef = Pick<fauth.User, "uid" | "displayName">
 
 export type UserState<T> =
   | { state: "unknown" }
