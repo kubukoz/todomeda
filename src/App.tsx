@@ -13,7 +13,7 @@ import {
   browserPopupRedirectResolver,
   browserSessionPersistence,
   indexedDBLocalPersistence,
-  signInWithRedirect,
+  signInWithPopup,
   GithubAuthProvider,
   onAuthStateChanged,
 } from "firebase/auth"
@@ -127,7 +127,7 @@ const useCurrentUser = () => {
 }
 
 const doLogin = () => {
-  signInWithRedirect(auth, new GithubAuthProvider()).catch((e) => {
+  signInWithPopup(auth, new GithubAuthProvider()).catch((e) => {
     window.alert(JSON.stringify(e))
     console.log(e)
   })
